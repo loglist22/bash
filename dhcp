@@ -1,0 +1,54 @@
+servidor-ubuntu-server-gateway
+
+adaptador puente
+080027776587
+
+internal
+0800275119C6
+
+---
+
+servidor-ubuntu-server-dhcp
+
+internal
+080027126E4C
+
+---
+servidor-ubuntu-server-dns
+
+internal
+080027 C0 C9 DA
+
+---
+
+
+
+
+
+
+subnet 192.168.100.0 netmask 255.255.255.0 {
+        range 192.168.100.11 192.168.100.200;
+        default-lease-time 36000;
+        option domain-name-servers 192.168.100.5;
+        option routers 192.168.100.1;
+        max-lease-time 86400;
+        host gateway {
+                hardware ethernet 08:00:27:51:19:C6;
+                fixed-address 192.168.100.1;
+        }
+        #host dns {
+        #        hardware ethernet 08:00:27:F8:91:41;
+        #        fixed-address 192.168.100.5;
+        #}
+}
+#esporadica
+subnet 192.168.101.0 netmask 255.255.255.0 {
+        range 192.168.100.11 192.168.100.200;
+        default-lease-time 36000;
+        option domain-name-servers 192.168.100.5;
+        option routers 192.168.100.1;
+        max-lease-time 86400;
+        
+        
+$ sudo apt-get install openvswitch-switch-dpdk
+

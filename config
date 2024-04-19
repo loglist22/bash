@@ -1,0 +1,192 @@
+https://juanseguravasco.github.io/smx/ubuntu18/enrutament.html#enrutament
+
+# Enable routing #
+------------------------
+#  What routing does is to redirect to the external network card traffic from the internal card destined for other networks (such as the Internet).
+
+# To enable routing, edit the file /etc/sysctl.conf(in CentOS it is /etc/sysctl.d/99-sysctl.conf) and uncomment the line:
+
+net.ipv4.ip_forward=1
+
+# For it to take effect we must reload the configuration with:
+
+sysctl -p
+
+# To check if it is enabled, run the command
+
+cat /proc/sys/net/ipv4/ip_forward
+
+# using ifupdown #
+--------------------------------------------------
+
+# Regarding NAT, with versions of GNU/Linux that use ifupdown (on Ubuntu until 17.04) we must add a rule to iptables. For example, if our EXTERNAL card is eth0 with IP 10.0.2.20 and our INTERNAL  network is 192.168.101.0, the command to activate NAT would be:
+
+iptables -t nat -A POSTROUTING -s 192.168.101.0/24 -o enp0s3 -j MASQUERADE
+
+
+# What we indicate is where the traffic to be routed will come FROM 
+# (-s INTERNAL network/mask ie -s 192.168.101.0/24) -------------
+# to which card it will be SENT TO 
+# (-o EXTERNAL card ie -o enp0s3) -------------
+# and route to the IP that has the external card (-j MASQUERADE    ; MASK FOR ANY IP; HOME IP AND SCHOOL IP).
+#  If our external IP will ALWAYS BE THE SAME we can put the option -j SNAT –to 10.0.2.20 (where 10.0.2.20 would be the external IP) 
+#  instead of -j MASQUERADE.
+
+--------------------------------------------------
+# If we have to route more than one internal network, we will repeat this command for each network to be routed:
+
+###iptables -t nat -A POSTROUTING -s 192.168.102.0/24 -o enp0s3 -j MASQUERADE
+
+# In this case for the network 192.168.102.0
+
+# To avoid having to run this command every time we restart the system, we will install the iptables-persistent package that asks us if it stores the current configuration of iptables (v4 and v6) and loads it again every time we restart the system. If we subsequently make changes to the iptables so that it asks us again if it saves the changes we will do so
+
+dpkg-reconfigure iptables-persistent
+
+
+----
+# To check if our system is doing NAT we execute the command:
+
+iptables -t nat -L
+
+# REMOVE the all rules with -F in place of -L
+------
+
+
+
+
+
+# Configure NAT on netplan systems #
+
+ufw enable
+ufw disable
+
+ufw status verbose
+
+# To configure NAT we must activate ufw and perform the following actions:
+
+# Edit the file /etc/default/ufwand change the line DEFAULT_FORWARD_POLICY="DROP" to
+DEFAULT_FORWARD_POLICY="ACCEPT"
+
+# Edit the script /etc/ufw/before.rules and add the following lines at the beginning (before the filter rules *filter ). This example is for routing the internal network 192.168.226.0: ```bash
+
+# NAT table rules
+*nat :POSTROUTING ACCEPT [0:0]
+# Forward traffic through eth0 - Change to match you out-interface
+-A POSTROUTING -s 192.168.226.0/24 -o enp0s3 -j MASQUERADE
+# don’t delete the ‘COMMIT’ line or these nat table rules won’t be processed
+COMMIT
+
+# all in one---------------------------------------------------------------------------------------------------
+*nat :POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -s 192.168.226.0/24 -o enp0s3 -j MASQUERADE
+COMMIT
+
+iptables -t nat -A POSTROUTING -s 192.168.101.0/24 -o enp0s3 -j MASQUERADE
+
+---what i wrote
+*nat :POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -s 192.168.100.0/24 -o enp0s3 -j MASQUERADE
+COMMIT
+
+
+
+----
+
+
+Només queda reiniciar el Firewall (podem desactivar-ho i tornar-lo a activar). Per a comprovar les regles que estan aplicant-se executem el comando que ja hem vist:
+```bash
+iptables  -t nat -L
+
+
+All that remains is to restart the Firewall (we can disable it and reactivate it). To check the rules that are being applied, run the command that we have already seen: ```bash iptables -t nat -L
+sudo systemctl restart ufw?
+ufw reload?
+
+
+NOTE:  IN WEBMIN
+/etc/sysctl.conf(not in /etc/ufw/sysctl.conf) 
+and the nat rules are saved in /etc/iptables.up.rules (instead of /etc/ufw/before.rules)
+
+ and loads them by adding the following line to /etc/network/interfaces:
+ # im guessing uses networkd instead of netplan
+post-up iptables restore < /etc/iptables.up.rules
+
+sudo iptables-save > /etc/iptables/rules.v4
+
+/etc/iptables/.v4???
+-------
+
+
+NETWORKING SERVICES
+Netplan vs ifupdown
+The main differences between the two systems are, among others:
+
+the configuration file which in ifupdown was like all plain text ( ) is now a YAML/etc/network/interfícies file located inside/etc/netplan
+
+the service that manages the network now is not networking but named systemd-networkd
+
+to activate or deactivate an interface we no longer have the commands ifupand ifdowninstead:
+  ip link set $targeta up
+  ip link set $targeta down
+
+
+we also don't have the commando ifconfigthat has been replaced by ip
+  ip a
+
+
+there is a new command, networkctl, to see what devices we have. With the parameter statusit gives us the configuration of each:
+networkctl
+networkctl status
+networkctl status enp0s3
+eth0 eth1 if wired ethernet cards 
+enp0s3 enp0s8 if in PCI slot or other
+wlanX if WiFi cards
+athX if atheros or other depending on the manufacturer
+---
+sudo service networking status
+/etc/network/interfaces
+
+sudo service networking status
+/etc/netplan/00-installer-config.yaml
+
+---
+
+COMMANDS
+ifconfig
+/sbin/ifconfig
+
+route
+NETPLAN 
+---
+The command ifconfig 
+is found in the net-tools package along with routeand others. Netplan instead of this package includes the iproute2util package that replaces this command with the command ipthat is more powerful. To see the configuration we write:
+
+ip addr show
+
+(or simply ip to). We can see only a summary of this information with ip -br a.
+
+ip route show
+
+
+ip a
+ip r
+
+ifconfigBoth commands ipallow us to change our configuration temporarily (to change it definitively we have to do it in the configuration files):
+
+$ sudo apt-get install openvswitch-switch-dpdk
+
+
+
+---pep
+table ip nat {
+	chain postrouting {
+		type nat hook postrouting priority srcnat; policy accept;
+		oifname "enp0s3" ip saddr 192.168.100.0/24 counter packets 4253 bytes 255768 masquerade
+	}
+
+	chain prerouting {
+		type nat hook prerouting priority filter; policy accept;
+		iifname "enp0s3" tcp dport 80 counter packets 0 bytes 0 dnat to 192.168.100.1
+	}
+}

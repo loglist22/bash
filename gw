@@ -13,3 +13,5 @@ alias dh='ssh admin-extra@192.168.100.2'
 #IPTABLE COMMANDS
 alias ff='sudo nano /etc/ufw/before.rules'
 alias tt='sudo iptables -t nat -L'
+
+alias gethub='https://github.com/loglist22/bash/'

@@ -1,0 +1,11 @@
+#!/bin/bash
+alias qq='nano /home/admin-extra/.bash_aliases'
+alias reload='source /home/admin-extra/.bash_aliases'
+
+alias netpl='sudo nano /etc/netplan/00-installer-config.yaml'
+alias nreload='sudo netplan apply'
+
+alias dh='ssh admin-extra@192.168.100.2'
+
+alias ff='sudo nano /etc/ufw/before.rules'
+alias tt='sudo iptables -t nat -L'

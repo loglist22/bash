@@ -14,6 +14,13 @@ alias dh='ssh admin-extra@192.168.100.2'
 alias ff='sudo nano /etc/ufw/before.rules'
 alias tt='sudo iptables -t nat -L'
 
+############
+#DHCP SERVER
+alias dhcpdconf='sudo nano /etc/dhcp/dhcpd.conf'
+alias dreload='sudo systemctl restart isc-dhcp-server'
+alias dstatus='sudo systemctl status isc-dhcp-server'
+############
+
 alias gethub='rm ./bash | git clone https://github.com/loglist22/bash/ | cp ./bash/gw ./.bash_aliases'
 
 #sudo apt upgrade openvswitch-switch

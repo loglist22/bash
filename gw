@@ -21,6 +21,14 @@ alias dreload='sudo systemctl restart isc-dhcp-server'
 alias dstatus='sudo systemctl status isc-dhcp-server'
 ############
 
+############
+#DNS SERVER
+alias b='cd /etc/bind'
+alias nb='sudo nano /etc/bind/db..lan'
+alias breload='sudo systemctl restart bind9'
+alias bstatus='sudo systemctl status bind9'
+############
+
 alias gethub='git clone https://github.com/loglist22/bash/ | cp ./bash/gw ./.bash_aliases'
 
 #sudo apt upgrade openvswitch-switch

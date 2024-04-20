@@ -16,7 +16,7 @@ alias tt='sudo iptables -t nat -L'
 
 ############
 #DHCP SERVER
-alias dhcpdconf='sudo nano /etc/dhcp/dhcpd.conf'
+alias dhcpc='sudo nano /etc/dhcp/dhcpd.conf'
 alias dreload='sudo systemctl restart isc-dhcp-server'
 alias dstatus='sudo systemctl status isc-dhcp-server'
 ############

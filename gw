@@ -29,6 +29,12 @@ alias breload='sudo systemctl restart bind9'
 alias bstatus='sudo systemctl status bind9'
 ############
 
+############
+#HTML-FTP SERVER
+alias h='cd /var/www'
+alias hh='cd /etc/apache2/sites-available'
+############
+
 alias gethub='git clone https://github.com/loglist22/bash/ | cp ./bash/gw ~/.bash_aliases'
 
 #sudo apt upgrade openvswitch-switch

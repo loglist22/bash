@@ -36,6 +36,6 @@ alias hh='cd /etc/apache2/sites-available'
 ############
 
 alias gethub='git clone https://github.com/loglist22/bash/ | cp ./bash/gw ~/.bash_aliases'
-alias h='sudo rm -Rf ./bash'
+alias rmbash='sudo rm -Rf ./bash'
 
 #sudo apt upgrade openvswitch-switch

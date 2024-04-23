@@ -1,0 +1,14 @@
+zone "extra.lan" in {
+      type master;
+      file "/etc/bind/db.extra.lan";
+};
+zone "100.168.192.in-addr.arpa" in {
+        type master;
+        file "/etc/bind/db.100.168.192";
+};
+#REPLICA
+zone "100.168.192.in-addr.arpa" in {
+        type slave;
+        file "/etc/bind/db.100.168.192";
+        masters {192.168.100.2 ;} ;
+};

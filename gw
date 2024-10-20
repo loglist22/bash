@@ -1,7 +1,8 @@
 #!/bin/bash
 #BASH
-alias qq='nano /home/admin-extra/.bash_aliases'
-alias reload='source /home/admin-extra/.bash_aliases'
+#admin-extra
+alias qq='nano /home/$USER/.bash_aliases'
+alias reload='source /home/$USER/.bash_aliases'
 
 #NETPLAN COMMANDS
 alias netpl='sudo nano /etc/netplan/00-installer-config.yaml'
